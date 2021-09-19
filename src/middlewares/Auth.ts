@@ -30,7 +30,7 @@ async function AuthMiddleware (req: Request, res: Response, next: NextFunction) 
           console.log(err)
           throw Errors.UnauthorizedException('Token error')
         }
-        req.idToken = decoded.id
+        req.idToken = decoded.sub
       })
 
       const verifyToken = await Token.find({ _tokenUserId: Number(req.idToken) }).exec()
@@ -38,11 +38,8 @@ async function AuthMiddleware (req: Request, res: Response, next: NextFunction) 
       if (!verifyToken) {
         throw Errors.UnauthorizedException('No token provided')
       }
-      console.log(verifyToken)
-
       next()
     } catch (error) {
-      console.log(error)
       throw Errors.UnauthorizedException('Token invalid')
     }
   } catch (error: any) {

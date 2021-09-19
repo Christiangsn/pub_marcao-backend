@@ -6,7 +6,10 @@ import { paramsConfig } from '../config/ParamsConfig'
 const UserSchema = new Schema(
   {
     name: String,
-    type: String,
+    type: {
+      type: Schema.Types.ObjectId,
+      ref: 'ProfileTypes'
+    },
     email: String,
     password: String,
     tokenUserId: {

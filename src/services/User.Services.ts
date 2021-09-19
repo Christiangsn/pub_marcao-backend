@@ -1,16 +1,15 @@
 import { Services } from './Services'
-import bcrypt from 'bcryptjs'
 import { genetarionToken } from '../config/AuthToken'
 import IUser from '../dtos/IUser'
 import ISigIn from '../dtos/ISigIn'
 import Errors from '../errors/Exception'
 
-class UserServices extends Services {
+export class UserServices extends Services {
   public TokenGeneration
 
   constructor () {
     super('User')
-    this.TokenGeneration = new Services<T>('Token')
+    this.TokenGeneration = new Services('Token')
   }
 
   public async store ({ name, email, type, password }: IUser): Promise<string> {
@@ -25,7 +24,7 @@ class UserServices extends Services {
     return 'Registro feito com sucesso'
   }
 
-  public async authenticate ({ password, email }: ISigIn) {
+  public async authenticate ({ password, email }: ISigIn): Promise<object> {
     const verifyUser = await super.show({ email })
     if (!verifyUser) {
       throw Errors.BadRequestException('Usuário ou senha incorreto!')
@@ -43,21 +42,31 @@ class UserServices extends Services {
     }
     const tokenUserId = verifyUser.id
 
-    const verifyToken = await this.TokenGeneration.show(tokenUserId)
+    const verifyToken = await this.TokenGeneration.show({ tokenUserId: tokenUserId })
 
     if (!verifyToken) {
       const tokenGeneration = await this.TokenGeneration.store(userToken)
-      await super.update({ id: verifyUser.id, tokenUserId: tokenGeneration.id })
+      await super.update(verifyUser.id, tokenGeneration.id)
     }
 
-    const tokenGeneration = await this.TokenGeneration.update({
-      id: verifyToken.id,
-      passwordResetToken: token
-    })
-    await super.update({ id: verifyUser.id, tokenUserId: tokenGeneration.id })
+    const tokenGeneration = await this.TokenGeneration.update(verifyToken.id, { passwordResetToken: token })
+    await super.update(verifyUser.id, { tokenUserId: tokenGeneration.id })
 
-    return { token }
+    const user = {
+      name: verifyUser.name
+    }
+
+    return { user, token: token }
+  }
+
+  public async verify (idToken: string): Promise<Object> {
+    const userData = await super.show({ _id: idToken })
+
+    const user = {
+      name: userData.name,
+      type: userData.type
+    }
+
+    return user
   }
 }
-
-export { UserServices }

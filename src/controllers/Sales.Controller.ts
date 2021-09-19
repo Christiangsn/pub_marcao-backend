@@ -1,0 +1,6 @@
+
+class SalesController {
+
+}
+
+export { SalesController }

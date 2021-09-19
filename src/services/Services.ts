@@ -15,8 +15,8 @@ class Services {
     return await db[this.model].findOne({ ...params }).exec()
   }
 
-  public async update (profile: object) {
-    return await db[this.model].findByIdAndUpdate(profile.id, {
+  public async update (id: number, profile: object) {
+    return await db[this.model].findByIdAndUpdate(id, {
       $set: profile
     })
   }

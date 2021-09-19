@@ -5,5 +5,6 @@ export default interface IUser extends Document {
     type: string,
     email: string,
     password: string,
-    document: String
+    document: String,
+    tokenUserId: string;
 }
