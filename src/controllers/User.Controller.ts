@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { UserServices } from '../services/User.Services'
 
 class UserController {
-  private userServices: UserServices
+  private userServices
 
   constructor () {
     this.userServices = new UserServices()

@@ -1,5 +1,6 @@
 import { Services } from './Services'
 import { genetarionToken } from '../config/AuthToken'
+import bcrypt from 'bcrypt'
 import IUser from '../dtos/IUser'
 import ISigIn from '../dtos/ISigIn'
 import Errors from '../errors/Exception'

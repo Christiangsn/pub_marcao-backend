@@ -11,7 +11,7 @@ router.post('/login', (req: Request, res: Response) => userController.authentica
 
 router.use(AuthMiddleware)
 router.get('/isAuthenticattion?', (req: Request, res: Response) => userController.verify(req, res))
-router.post('/create', userController.store)
+router.post('/create', (req: Request, res: Response) => userController.store(req, res))
 router.post('/create/client', clientController.store)
 
 export default router

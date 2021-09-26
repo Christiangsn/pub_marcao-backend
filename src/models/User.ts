@@ -5,13 +5,23 @@ import { paramsConfig } from '../config/ParamsConfig'
 
 const UserSchema = new Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      required: true
+    },
     type: {
       type: Schema.Types.ObjectId,
-      ref: 'ProfileTypes'
+      ref: 'ProfileTypes',
+      required: true
     },
-    email: String,
-    password: String,
+    email: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
     tokenUserId: {
       type: Schema.Types.ObjectId,
       ref: 'Token',
@@ -33,7 +43,7 @@ UserSchema.pre<IUser>('save', function (next) {
       return next(err)
     }
 
-    bcrypt.hash(user.password, salt, (err, hash) => {
+    bcrypt.hash(user.password, Number(salt), (err, hash) => {
       if (err) return next(err)
 
       user.password = hash

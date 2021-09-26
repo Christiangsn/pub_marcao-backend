@@ -7,6 +7,10 @@ class Services {
     this.model = model
   }
 
+  public async index () {
+    return await db[this.model].find({}).exec()
+  }
+
   public async store (profile: object) {
     return await db[this.model].create(profile)
   }

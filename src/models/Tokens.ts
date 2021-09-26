@@ -5,16 +5,19 @@ const TokenSchema = new Schema(
   {
     passwordResetToken: {
       type: String,
-      select: false
+      select: false,
+      required: true
     },
     passwordResetExpires: {
       type: Date,
-      select: false
+      select: false,
+      required: true
     },
     tokenUserId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      select: false
+      select: false,
+      required: true
     }
   }, {
     timestamps: true,
